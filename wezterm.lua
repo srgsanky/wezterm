@@ -69,7 +69,8 @@ config.keys = {
 
 -- https://github.com/wez/wezterm/discussions/3672#discussioncomment-10307119
 config.mouse_bindings = {
-	-- CMD-click will open the link under the mouse cursor
+	-- CMD+click will open the link under the mouse cursor
+	-- When in tmux, use CMD+SHIFT+click`. See <https://github.com/wez/wezterm/issues/2003>
 	{
 		event = { Up = { streak = 1, button = "Left" } },
 		mods = "SUPER",
