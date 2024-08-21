@@ -32,6 +32,10 @@ config.window_padding = {
 	bottom = "0.5cell",
 }
 
+-- https://wezfurlong.org/wezterm/scrollback.html
+-- How many lines of scrollback you want to retain per tab
+config.scrollback_lines = 1000000
+
 -- keyboard shortcuts - see https://wezfurlong.org/wezterm/config/lua/keyassignment/index.html
 -- https://wezfurlong.org/wezterm/config/lua/config/native_macos_fullscreen_mode.html
 config.native_macos_fullscreen_mode = true
@@ -47,6 +51,18 @@ config.keys = {
 		mods = "CTRL",
 		action = act.PaneSelect({
 			alphabet = "1234567890",
+		}),
+	},
+
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
+	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
+	-- shell to redraw its prompt
+	{
+		key = "K",
+		mods = "SUPER",
+		action = act.Multiple({
+			act.ClearScrollback("ScrollbackAndViewport"),
+			act.SendKey({ key = "L", mods = "CTRL" }),
 		}),
 	},
 }
