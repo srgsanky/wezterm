@@ -1,6 +1,8 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
+local act = wezterm.action
+
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
@@ -33,6 +35,21 @@ config.window_padding = {
 -- keyboard shortcuts - see https://wezfurlong.org/wezterm/config/lua/keyassignment/index.html
 -- https://wezfurlong.org/wezterm/config/lua/config/native_macos_fullscreen_mode.html
 config.native_macos_fullscreen_mode = true
+
+config.keys = {
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PaneSelect.html
+	-- activate pane selection mode with the default alphabet (labels are "a", "s", "d", "f" and so on)
+	{ key = "8", mods = "CTRL", action = act.PaneSelect },
+
+	-- activate pane selection mode with numeric labels
+	{
+		key = "9",
+		mods = "CTRL",
+		action = act.PaneSelect({
+			alphabet = "1234567890",
+		}),
+	},
+}
 
 -- https://github.com/wez/wezterm/discussions/3672#discussioncomment-10307119
 config.mouse_bindings = {
