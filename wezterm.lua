@@ -13,8 +13,10 @@ config.color_scheme = "Catppuccin Mocha"
 config.colors = {
 	-- cursor_bg = "#52ad70",
 }
-config.font = wezterm.font("MesloLGS Nerd Font Mono")
-config.font_size = 19
+
+-- Previously used font: MesloLGS Nerd Font Mono
+config.font = wezterm.font("JetBrains Mono")
+config.font_size = 18
 
 config.enable_tab_bar = true
 
@@ -40,6 +42,8 @@ config.scrollback_lines = 1000000
 -- https://wezfurlong.org/wezterm/config/lua/config/native_macos_fullscreen_mode.html
 config.native_macos_fullscreen_mode = true
 
+-- Modifiers: https://wezfurlong.org/wezterm/config/keys.html#configuring-key-assignments
+-- Note: Key is case sensitive
 config.keys = {
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PaneSelect.html
 	-- activate pane selection mode with the default alphabet (labels are "a", "s", "d", "f" and so on)
@@ -56,14 +60,35 @@ config.keys = {
 
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
 	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
-	-- shell to redraw its prompt
+	-- shell to redraw its prompt. This mimics the equivalent behavior in iTerm2 and macOS terminal.
 	{
-		key = "K",
-		mods = "SUPER",
+		key = "k", -- Note: case-sensitive
+		mods = "CMD",
 		action = act.Multiple({
 			act.ClearScrollback("ScrollbackAndViewport"),
 			act.SendKey({ key = "L", mods = "CTRL" }),
 		}),
+	},
+	-- Alternate way to clear scrollback
+	{
+		key = "K",
+		mods = "CTRL|SHIFT",
+		action = act.ClearScrollback("ScrollbackAndViewport"),
+	},
+
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearSelection.html
+	{
+		-- CTRL + SHIFT + c to copy selected text. Once the text is copied, reset the selection.
+		-- Using y will result in a similar behavior
+		key = "c",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action_callback(function(window, pane)
+			local has_selection = window:get_selection_text_for_pane(pane) ~= ""
+			if has_selection then
+				window:perform_action(act.CopyTo("ClipboardAndPrimarySelection"), pane)
+				window:perform_action(act.ClearSelection, pane)
+			end
+		end),
 	},
 }
 
