@@ -19,9 +19,12 @@ config.font = wezterm.font("JetBrains Mono")
 config.font_size = 18
 
 config.enable_tab_bar = true
+-- https://wezfurlong.org/wezterm/config/lua/config/tab_bar_at_bottom.html
+config.tab_bar_at_bottom = true
 
 -- INTEGRATED_BUTTONS will show the close, minimize, maximize buttons along with the tab bar
-config.window_decorations = "RESIZE | INTEGRATED_BUTTONS"
+-- config.window_decorations = "RESIZE | INTEGRATED_BUTTONS"
+config.window_decorations = "RESIZE"
 
 config.window_background_opacity = 1.0
 config.macos_window_background_blur = 10
@@ -98,7 +101,7 @@ config.mouse_bindings = {
 	-- When in tmux, use CMD+SHIFT+click`. See <https://github.com/wez/wezterm/issues/2003>
 	{
 		event = { Up = { streak = 1, button = "Left" } },
-		mods = "SUPER",
+		mods = "CMD",
 		action = wezterm.action.OpenLinkAtMouseCursor,
 	},
 }
