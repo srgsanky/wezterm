@@ -104,6 +104,20 @@ config.mouse_bindings = {
 		mods = "CMD",
 		action = wezterm.action.OpenLinkAtMouseCursor,
 	},
+
+	-- https://www.reddit.com/r/wezterm/comments/10jda7o/is_there_a_way_not_to_open_urls_on_simple_click/
+	-- Disable the default behavior that opens URL with a mouse click without CMD
+	{
+		event = { Up = { streak = 1, button = "Left" } },
+		mods = "NONE",
+		action = wezterm.action.DisableDefaultAssignment,
+	},
+	-- Disable the Ctrl-click down event to stop programs from seeing it when a URL is clicked
+	{
+		event = { Down = { streak = 1, button = "Left" } },
+		mods = "CTRL",
+		action = wezterm.action.Nop,
+	},
 }
 
 -- This is apparantly required for the cmd + click to work.
