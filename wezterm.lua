@@ -11,16 +11,41 @@ local config = wezterm.config_builder()
 -- https://wezfurlong.org/wezterm/colorschemes/c/index.html#catppuccin-mocha
 config.color_scheme = "Catppuccin Mocha"
 config.colors = {
-	-- cursor_bg = "#52ad70",
+	tab_bar = {
+		-- The color of the inactive tab bar edge/divider
+		inactive_tab_edge = "#575757",
+	},
 }
 
 -- Previously used font: MesloLGS Nerd Font Mono
 config.font = wezterm.font("JetBrains Mono")
 config.font_size = 18
 
+-----------------------------------------------------------------------------------------
+--Tab bar
+-----------------------------------------------------------------------------------------
 config.enable_tab_bar = true
 -- https://wezfurlong.org/wezterm/config/lua/config/tab_bar_at_bottom.html
 config.tab_bar_at_bottom = true
+-- The following is available only in nightly build as of now
+-- <https://wezfurlong.org/wezterm/config/lua/config/show_close_tab_button_in_tabs.html>
+-- config.show_close_tab_button_in_tabs = false
+
+-- https://wezfurlong.org/wezterm/config/appearance.html#tab-bar-appearance-colors
+config.window_frame = {
+	-- The font used in the tab bar.
+	-- Roboto Bold is the default; this font is bundled with wezterm.
+	-- Whatever font is selected here, it will have the main font setting appended to it to pick up any
+	-- fallback fonts you may have used there.
+	font = wezterm.font({ family = "Roboto", weight = "Bold" }),
+
+	-- The size of the font in the tab bar.
+	-- Default to 10.0 on Windows but 12.0 on other systems
+	font_size = 14.0,
+}
+
+-- https://wezfurlong.org/wezterm/config/lua/config/tab_bar_style.html
+-----------------------------------------------------------------------------------------
 
 -- INTEGRATED_BUTTONS will show the close, minimize, maximize buttons along with the tab bar
 -- config.window_decorations = "RESIZE | INTEGRATED_BUTTONS"
