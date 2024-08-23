@@ -59,7 +59,7 @@ function tab_title(tab_info)
 	-- https://wezfurlong.org/wezterm/config/lua/TabInformation.html
 	local title = tab_info.tab_title
 	-- Use 1 based index
-	local title_prefix = "⌘ " .. (tab_info.tab_index + 1) .. " "
+	local title_prefix = (tab_info.tab_index + 1) .. ": "
 	-- if the tab title is explicitly set, take that
 	if title and #title > 0 then
 		return title_prefix .. title
