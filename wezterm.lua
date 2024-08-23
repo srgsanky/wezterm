@@ -46,7 +46,7 @@ config.window_frame = {
 
 	-- The size of the font in the tab bar.
 	-- Default to 10.0 on Windows but 12.0 on other systems
-	font_size = 14.0,
+	font_size = 18.0,
 }
 
 -- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
@@ -56,14 +56,16 @@ config.window_frame = {
 -- or `wezterm cli set-tab-title`, but falls back to the
 -- title of the active pane in that tab.
 function tab_title(tab_info)
+	-- https://wezfurlong.org/wezterm/config/lua/TabInformation.html
 	local title = tab_info.tab_title
+	-- Use 1 based index
+	local title_prefix = "⌘ " .. (tab_info.tab_index + 1) .. " "
 	-- if the tab title is explicitly set, take that
 	if title and #title > 0 then
-		return title
+		return title_prefix .. title
 	end
-	-- Otherwise, use the title from the active pane
-	-- in that tab
-	return tab_info.active_pane.title
+	-- Otherwise, use the title from the active pane in that tab
+	return title_prefix .. tab_info.active_pane.title
 end
 
 wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
