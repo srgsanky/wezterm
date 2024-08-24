@@ -21,6 +21,7 @@ config.colors = {
 config.font = wezterm.font("JetBrains Mono")
 config.font_size = 18
 
+-- Always show scroll bar on the right to get a sense of the scrollback length.
 config.enable_scroll_bar = true
 
 -----------------------------------------------------------------------------------------
@@ -55,7 +56,7 @@ config.window_frame = {
 -- It prefers the title that was set via `tab:set_title()`
 -- or `wezterm cli set-tab-title`, but falls back to the
 -- title of the active pane in that tab.
-function tab_title(tab_info)
+local function tab_title(tab_info)
 	-- https://wezfurlong.org/wezterm/config/lua/TabInformation.html
 	local title = tab_info.tab_title
 	-- Use 1 based index
@@ -68,7 +69,7 @@ function tab_title(tab_info)
 	return title_prefix .. tab_info.active_pane.title
 end
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+wezterm.on("format-tab-title", function(tab, _, _, _, hover, max_width)
 	local edge_background = "#0b0022"
 
 	-- Color for inactive tab
