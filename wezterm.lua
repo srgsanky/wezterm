@@ -140,6 +140,15 @@ config.keys = {
 		}),
 	},
 
+	-- Zoom current pane (similar to <prefix> z in tmux)
+	-- CTRL + Z puts the current process in the background
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/TogglePaneZoomState.html
+	-- {
+	-- 	key = "Z",
+	-- 	mods = "CTRL",
+	-- 	action = wezterm.action.TogglePaneZoomState,
+	-- },
+
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
 	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
 	-- shell to redraw its prompt. This mimics the equivalent behavior in iTerm2 and macOS terminal.
