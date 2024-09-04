@@ -100,6 +100,23 @@ wezterm.on("format-tab-title", function(tab, _, _, _, hover, max_width)
 	}
 end)
 
+-- When in Copy mode, show an indicator at the bottom right.
+-- https://wezfurlong.org/wezterm/config/lua/window/set_right_status.html
+wezterm.on("update-right-status", function(window, _)
+	local mode = window:active_key_table()
+
+	local status = ""
+
+	if mode == "copy_mode" then
+		status = "  Copy mode  "
+	end
+	window:set_right_status(wezterm.format({
+		{ Foreground = { AnsiColor = "Fuchsia" } },
+		{ Background = { Color = "blue" } },
+		{ Text = status },
+	}))
+end)
+
 -- https://wezfurlong.org/wezterm/config/lua/config/tab_bar_style.html
 -----------------------------------------------------------------------------------------
 
