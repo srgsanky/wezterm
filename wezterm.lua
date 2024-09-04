@@ -141,6 +141,8 @@ config.keys = {
 	},
 
 	-- Zoom current pane (similar to <prefix> z in tmux)
+	-- Default shortcut is CTRL + SHIFT + Z
+	--
 	-- CTRL + Z puts the current process in the background
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/TogglePaneZoomState.html
 	-- {
