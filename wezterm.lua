@@ -56,6 +56,8 @@ config.window_frame = {
 -- It prefers the title that was set via `tab:set_title()`
 -- or `wezterm cli set-tab-title`, but falls back to the
 -- title of the active pane in that tab.
+-- TODO: wezterm uses the title prefix "Copy mode:" when the pane enters copy mode.
+--	     How to replicate this behavior when using custom tab title?
 local function tab_title(tab_info)
 	-- https://wezfurlong.org/wezterm/config/lua/TabInformation.html
 	local title = tab_info.tab_title
