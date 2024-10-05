@@ -206,6 +206,20 @@ config.keys = {
 	},
 }
 
+-- <https://wezfurlong.org/wezterm/config/keyboard-concepts.html#macos-left-and-right-option-key>
+-- They help configure the behavior of left and right alt keys.
+-- Composed key allows you to modify the input character. For e.g. alt + p can produce the symbol
+-- pi. To use alt with readline, you don't want the behavior of composed keys.
+--
+-- <https://github.com/wez/wezterm/issues/216> is a good troubleshooting issue that motivated these
+-- configurations. It resulted in the addition of an FAQ about readline configurations <https://github.com/wez/wezterm/commit/b936e9685b9ea1543376d5e4bb4b30bed38d339f>
+-- Introduced as part of
+-- <https://github.com/wez/wezterm/commit/2803e8fc58bd6adad2d549db11f4d3224dddc675#diff-3e1c02dfda2f6fbdd0890cce0b05013db7884e83461cb7d905a28afbe4559badR25>
+--
+-- These are the defaults. I have added them for visibility.
+config.send_composed_key_when_left_alt_is_pressed = false -- Equivalent to Meta or Esc+ in iTerm
+config.send_composed_key_when_right_alt_is_pressed = true -- Equivalent to Normal in iTerm
+
 -- https://github.com/wez/wezterm/discussions/3672#discussioncomment-10307119
 config.mouse_bindings = {
 	-- CMD+click will open the link under the mouse cursor
