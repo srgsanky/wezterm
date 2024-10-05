@@ -217,6 +217,29 @@ config.keys = {
 		mods = "LEADER|CTRL",
 		action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
 	},
+
+	-- Resizing pane
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/AdjustPaneSize.html
+	{
+		key = "H",
+		mods = "LEADER",
+		action = act.AdjustPaneSize({ "Left", 5 }),
+	},
+	{
+		key = "J",
+		mods = "LEADER",
+		action = act.AdjustPaneSize({ "Down", 5 }),
+	},
+	{
+		key = "K",
+		mods = "LEADER",
+		action = act.AdjustPaneSize({ "Up", 5 }),
+	},
+	{
+		key = "L",
+		mods = "LEADER",
+		action = act.AdjustPaneSize({ "Right", 5 }),
+	},
 }
 
 -- <https://wezfurlong.org/wezterm/config/keyboard-concepts.html#macos-left-and-right-option-key>
