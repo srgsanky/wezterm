@@ -153,6 +153,9 @@ config.native_macos_fullscreen_mode = true
 -- <https://wezfurlong.org/wezterm/config/keys.html#leader-key>
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
+-- https://wezfurlong.org/wezterm/config/default-keys.html
+-- Use the following command to show code that you can copy paste.
+-- wezterm show-keys --lua
 config.keys = {
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PaneSelect.html
 	-- activate pane selection mode with the default alphabet (labels are "a", "s", "d", "f" and so on)
@@ -268,6 +271,10 @@ config.keys = {
 		mods = "LEADER",
 		action = act.AdjustPaneSize({ "Right", 10 }),
 	},
+
+	-- Disable the keybinding for full screen. My window is managed by aerospace.
+	-- https://wezfurlong.org/wezterm/config/keys.html
+	{ key = "Enter", mods = "ALT", action = act.DisableDefaultAssignment },
 }
 
 -- <https://wezfurlong.org/wezterm/config/keyboard-concepts.html#macos-left-and-right-option-key>
