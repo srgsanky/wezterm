@@ -226,6 +226,18 @@ config.keys = {
 		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
 
+	-- Alternate split pane keybindings inspired by tmux.
+	{
+		key = "%",
+		mods = "LEADER",
+		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		key = '"',
+		mods = "LEADER",
+		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+
 	-- Pass through leader key
 	-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
 	{
