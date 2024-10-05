@@ -17,9 +17,11 @@ config.colors = {
 	},
 }
 
+local font_size = 16
+
 -- Previously used font: MesloLGS Nerd Font Mono
 config.font = wezterm.font("JetBrains Mono")
-config.font_size = 18
+config.font_size = font_size
 
 -- Always show scroll bar on the right to get a sense of the scrollback length.
 config.enable_scroll_bar = true
@@ -47,7 +49,7 @@ config.window_frame = {
 
 	-- The size of the font in the tab bar.
 	-- Default to 10.0 on Windows but 12.0 on other systems
-	font_size = 18.0,
+	font_size = font_size,
 }
 
 -- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
