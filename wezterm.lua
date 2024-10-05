@@ -147,6 +147,12 @@ config.native_macos_fullscreen_mode = true
 
 -- Modifiers: https://wezfurlong.org/wezterm/config/keys.html#configuring-key-assignments
 -- Note: Key is case sensitive
+--
+-- NOTE: Make sure not to use <C-a> as the prefix for tmux. Otherwise, the tmux keybindings will be
+--       painful.
+-- <https://wezfurlong.org/wezterm/config/keys.html#leader-key>
+config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
+
 config.keys = {
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PaneSelect.html
 	-- activate pane selection mode with the default alphabet (labels are "a", "s", "d", "f" and so on)
@@ -203,6 +209,13 @@ config.keys = {
 				window:perform_action(act.ClearSelection, pane)
 			end
 		end),
+	},
+	-- Pass through leader key
+	-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
+	{
+		key = "a",
+		mods = "LEADER|CTRL",
+		action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
 	},
 }
 
