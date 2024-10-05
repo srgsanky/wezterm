@@ -237,24 +237,24 @@ config.keys = {
 	-- Resizing pane
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/AdjustPaneSize.html
 	{
-		key = "H",
+		key = "h",
 		mods = "LEADER",
-		action = act.AdjustPaneSize({ "Left", 5 }),
+		action = act.AdjustPaneSize({ "Left", 10 }),
 	},
 	{
-		key = "J",
+		key = "j",
 		mods = "LEADER",
-		action = act.AdjustPaneSize({ "Down", 5 }),
+		action = act.AdjustPaneSize({ "Down", 10 }),
 	},
 	{
-		key = "K",
+		key = "k",
 		mods = "LEADER",
-		action = act.AdjustPaneSize({ "Up", 5 }),
+		action = act.AdjustPaneSize({ "Up", 10 }),
 	},
 	{
-		key = "L",
+		key = "l",
 		mods = "LEADER",
-		action = act.AdjustPaneSize({ "Right", 5 }),
+		action = act.AdjustPaneSize({ "Right", 10 }),
 	},
 }
 
