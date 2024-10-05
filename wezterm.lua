@@ -210,6 +210,22 @@ config.keys = {
 			end
 		end),
 	},
+
+	-- Split pane. v and s are inspired by Vim's split keybindings.
+	-- Note the terms horizontal and vertical are inverted compared to Vim.
+	{
+		-- https://wezfurlong.org/wezterm/config/lua/keyassignment/SplitHorizontal.html
+		key = "v",
+		mods = "LEADER",
+		action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }),
+	},
+	{
+		-- https://wezfurlong.org/wezterm/config/lua/keyassignment/SplitVertical.html
+		key = "s",
+		mods = "LEADER",
+		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
+	},
+
 	-- Pass through leader key
 	-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
 	{
