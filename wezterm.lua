@@ -9,7 +9,11 @@ local config = wezterm.config_builder()
 -- This is where you actually apply your config choices
 
 -- https://wezfurlong.org/wezterm/colorschemes/c/index.html#catppuccin-mocha
-config.color_scheme = "Catppuccin Mocha"
+-- Plain Catppuccin Mocha doesn't work well with Zellij (it causes extra orange background at the
+-- top and bottom which are distracting). The Gogh version doesn't have this problem and practically
+-- looks the same as the plain one (I couldn't tell the difference).
+-- config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "Catppuccin Mocha (Gogh)"
 config.colors = {
 	tab_bar = {
 		-- The color of the inactive tab bar edge/divider
