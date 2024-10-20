@@ -279,6 +279,15 @@ config.keys = {
 	-- Disable the keybinding for full screen. My window is managed by aerospace.
 	-- https://wezfurlong.org/wezterm/config/keys.html
 	{ key = "Enter", mods = "ALT", action = act.DisableDefaultAssignment },
+
+	-- Move current pane to new window
+	{
+		key = "!",
+		mods = "LEADER",
+		action = wezterm.action_callback(function(_, pane)
+			pane:move_to_new_window()
+		end),
+	},
 }
 
 -- <https://wezfurlong.org/wezterm/config/keyboard-concepts.html#macos-left-and-right-option-key>
