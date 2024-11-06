@@ -349,6 +349,9 @@ config.visual_bell = {
 config.colors = {
 	visual_bell = "#A0522D",
 }
+
+-- Increasing the fps for a much smoother rendering experience.
+config.max_fps = 120
 -----------------------------------------------------------------------------------------
 
 -- and finally, return the configuration to wezterm
