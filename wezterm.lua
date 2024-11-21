@@ -1,6 +1,10 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
+-- Detect the operating system
+-- https://wezfurlong.org/wezterm/config/lua/wezterm/target_triple.html
+local is_mac = wezterm.target_triple == "aarch64-apple-darwin" or wezterm.target_triple == "x86_64-apple-darwin"
+
 local act = wezterm.action
 
 -- This will hold the configuration.
@@ -289,6 +293,26 @@ config.keys = {
 		end),
 	},
 }
+
+if is_mac then
+	-- Default
+	--    CTRL                 +                  ->   IncreaseFontSize
+	--    SHIFT | CTRL         +                  ->   IncreaseFontSize
+	--    SHIFT | CTRL         -                  ->   DecreaseFontSize
+	--    SUPER                -                  ->   DecreaseFontSize
+	--    CTRL                 _                  ->   DecreaseFontSize
+	--    SHIFT | CTRL         _                  ->   DecreaseFontSize
+	--    CTRL                 =                  ->   IncreaseFontSize
+	--    SHIFT | CTRL         =                  ->   IncreaseFontSize
+	table.insert(config.keys, { key = "+", mods = "CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "-", mods = "CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "_", mods = "CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "=", mods = "CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "+", mods = "SHIFT | CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "-", mods = "SHIFT | CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "_", mods = "SHIFT | CTRL", action = "DisableDefaultAssignment" })
+	table.insert(config.keys, { key = "=", mods = "SHIFT | CTRL", action = "DisableDefaultAssignment" })
+end
 
 -- <https://wezfurlong.org/wezterm/config/keyboard-concepts.html#macos-left-and-right-option-key>
 -- They help configure the behavior of left and right alt keys.
