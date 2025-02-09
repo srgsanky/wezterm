@@ -378,5 +378,8 @@ config.colors = {
 config.max_fps = 120
 -----------------------------------------------------------------------------------------
 
+-- Kitty image protocol <https://github.com/wezterm/wezterm/issues/986>
+config.enable_kitty_graphics = true
+
 -- and finally, return the configuration to wezterm
 return config
