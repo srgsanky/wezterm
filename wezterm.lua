@@ -188,6 +188,12 @@ config.keys = {
 	-- 	mods = "CTRL",
 	-- 	action = wezterm.action.TogglePaneZoomState,
 	-- },
+	--
+	{
+		key = "z",
+		mods = "LEADER",
+		action = wezterm.action.TogglePaneZoomState,
+	},
 
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
 	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
