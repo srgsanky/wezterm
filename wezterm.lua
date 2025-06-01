@@ -1,6 +1,34 @@
 -- Pull in the wezterm API
 local wezterm = require("wezterm")
 
+-- Helper function to merge multiple key binding tables into a single table
+-- This allows us to organize keybindings into logical groups while still
+-- providing a single table to wezterm's config.keys
+--
+-- Parameters: ... (varargs) - Any number of key binding tables
+-- Returns: A single table containing all key bindings from input tables
+--
+-- Example usage:
+--   local all_keys = merge_keys(pane_keys, scrollback_keys, selection_keys)
+local function merge_keys(...)
+	-- Initialize empty result table to hold all combined keybindings
+	local result = {}
+
+	-- Iterate through each table passed as an argument
+	-- The {...} syntax captures all arguments into a table
+	for _, keys in ipairs({ ... }) do
+		-- For each keybinding table, iterate through its individual key definitions
+		for _, key in ipairs(keys) do
+			-- Add each key definition to our result table
+			-- Each 'key' is a table like: { key = "h", mods = "LEADER", action = act.AdjustPaneSize(...) }
+			table.insert(result, key)
+		end
+	end
+
+	-- Return the flattened table containing all keybindings
+	return result
+end
+
 -- Detect the operating system
 -- https://wezfurlong.org/wezterm/config/lua/wezterm/target_triple.html
 local is_mac = wezterm.target_triple == "aarch64-apple-darwin" or wezterm.target_triple == "x86_64-apple-darwin"
@@ -161,10 +189,8 @@ config.native_macos_fullscreen_mode = true
 -- <https://wezfurlong.org/wezterm/config/keys.html#leader-key>
 config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 
--- https://wezfurlong.org/wezterm/config/default-keys.html
--- Use the following command to show code that you can copy paste.
--- wezterm show-keys --lua
-config.keys = {
+-- Pane selection and navigation
+local pane_selection_keys = {
 	-- You can also move between panes using
 	-- ctrl + shift + <arrow keys>
 
@@ -197,40 +223,10 @@ config.keys = {
 		mods = "LEADER",
 		action = wezterm.action.TogglePaneZoomState,
 	},
+}
 
-	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
-	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
-	-- shell to redraw its prompt. This mimics the equivalent behavior in iTerm2 and macOS terminal.
-	{
-		key = "k", -- Note: case-sensitive
-		mods = "CMD",
-		action = act.Multiple({
-			act.ClearScrollback("ScrollbackAndViewport"),
-			act.SendKey({ key = "L", mods = "CTRL" }),
-		}),
-	},
-	-- Alternate way to clear scrollback
-	{
-		key = "K",
-		mods = "CTRL|SHIFT",
-		action = act.ClearScrollback("ScrollbackAndViewport"),
-	},
-
-	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearSelection.html
-	{
-		-- CTRL + SHIFT + c to copy selected text. Once the text is copied, reset the selection.
-		-- Using y will result in a similar behavior
-		key = "c",
-		mods = "CTRL|SHIFT",
-		action = wezterm.action_callback(function(window, pane)
-			local has_selection = window:get_selection_text_for_pane(pane) ~= ""
-			if has_selection then
-				window:perform_action(act.CopyTo("ClipboardAndPrimarySelection"), pane)
-				window:perform_action(act.ClearSelection, pane)
-			end
-		end),
-	},
-
+-- Pane management (splitting, moving)
+local pane_management_keys = {
 	-- Split pane. v and s are inspired by Vim's split keybindings.
 	-- Note the terms horizontal and vertical are inverted compared to Vim.
 	{
@@ -258,16 +254,19 @@ config.keys = {
 		action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }),
 	},
 
-	-- Pass through leader key
-	-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
+	-- Move current pane to new window
 	{
-		key = "a",
-		mods = "LEADER|CTRL",
-		action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
+		key = "!",
+		mods = "LEADER",
+		action = wezterm.action_callback(function(_, pane)
+			pane:move_to_new_window()
+		end),
 	},
+}
 
-	-- Resizing pane
-	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/AdjustPaneSize.html
+-- Resizing pane
+-- https://wezfurlong.org/wezterm/config/lua/keyassignment/AdjustPaneSize.html
+local pane_resize_keys = {
 	{
 		key = "h",
 		mods = "LEADER",
@@ -288,20 +287,79 @@ config.keys = {
 		mods = "LEADER",
 		action = act.AdjustPaneSize({ "Right", 10 }),
 	},
+}
 
-	-- Disable the keybinding for full screen. My window is managed by aerospace.
-	-- https://wezfurlong.org/wezterm/config/keys.html
-	{ key = "Enter", mods = "ALT", action = act.DisableDefaultAssignment },
-
-	-- Move current pane to new window
+-- Scrollback and screen management
+local scrollback_keys = {
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearScrollback.html
+	-- Clears the scrollback and viewport, and then sends CTRL-L to ask the
+	-- shell to redraw its prompt. This mimics the equivalent behavior in iTerm2 and macOS terminal.
 	{
-		key = "!",
-		mods = "LEADER",
-		action = wezterm.action_callback(function(_, pane)
-			pane:move_to_new_window()
+		key = "k", -- Note: case-sensitive
+		mods = "CMD",
+		action = act.Multiple({
+			act.ClearScrollback("ScrollbackAndViewport"),
+			act.SendKey({ key = "L", mods = "CTRL" }),
+		}),
+	},
+	-- Alternate way to clear scrollback
+	{
+		key = "K",
+		mods = "CTRL|SHIFT",
+		action = act.ClearScrollback("ScrollbackAndViewport"),
+	},
+}
+
+-- Copy/paste and selection
+local selection_keys = {
+	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/ClearSelection.html
+	{
+		-- CTRL + SHIFT + c to copy selected text. Once the text is copied, reset the selection.
+		-- Using y will result in a similar behavior
+		key = "c",
+		mods = "CTRL|SHIFT",
+		action = wezterm.action_callback(function(window, pane)
+			local has_selection = window:get_selection_text_for_pane(pane) ~= ""
+			if has_selection then
+				window:perform_action(act.CopyTo("ClipboardAndPrimarySelection"), pane)
+				window:perform_action(act.ClearSelection, pane)
+			end
 		end),
 	},
 }
+
+-- Leader key passthrough
+local leader_keys = {
+	-- Pass through leader key
+	-- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
+	{
+		key = "a",
+		mods = "LEADER|CTRL",
+		action = wezterm.action.SendKey({ key = "a", mods = "CTRL" }),
+	},
+}
+
+-- Disabled/overridden default keybindings
+local disabled_keys = {
+	-- Disable the keybinding for full screen. My window is managed by aerospace.
+	-- https://wezfurlong.org/wezterm/config/keys.html
+	{ key = "Enter", mods = "ALT", action = act.DisableDefaultAssignment },
+}
+
+-- https://wezfurlong.org/wezterm/config/default-keys.html
+-- Use the following command to show code that you can copy paste.
+-- wezterm show-keys --lua
+--
+-- Combine all keybindings
+config.keys = merge_keys(
+	pane_selection_keys,
+	pane_management_keys,
+	pane_resize_keys,
+	scrollback_keys,
+	selection_keys,
+	leader_keys,
+	disabled_keys
+)
 
 if is_mac then
 	-- Default
