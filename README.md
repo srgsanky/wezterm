@@ -33,3 +33,22 @@ alias set-tab-title="wezterm cli set-tab-title"
 alias set-tab-title="flatpak run org.wezfurlong.wezterm cli set-tab-title"
 ```
 
+## Pane management
+
+| Pane creation                                    | Keybinding sequence 1         | Keybinding sequence 2 |
+| ------------------------------------------------ | ----------------------------- | --------------------- |
+| Create vertical split pane                       | `CTRL + a`                    | `%`                   |
+|                                                  | `CTRL + a`                    | `v`                   |
+| Create horizontal split pane                     | `CTRL + a`                    | `"`                   |
+|                                                  | `CTRL + a`                    | `s`                   |
+|                                                  |                               |                       |
+| **Navigation**                                   |                               |                       |
+| Move across panes                                | `CTRL + SHIFT + <arrow keys>` |                       |
+| Show character hints (a,s,d,f etc) to focus pane | `CTRL + a`                    | `CTRL + 8`            |
+| Show number hints (1, 2, 3, etc) to focus pane   | `CTRL + a`                    | `CTRL + 9`            |
+|                                                  |                               |                       |
+| **Resize**                                       |                               |                       |
+| Modify width                                     | `CTRL + a`                    | `h/l`                 |
+| Modify height                                    | `CTRL + a`                    | `j/k`                 |
+| Zoom the pane                                    | `CTRL + a`                    | `z`                   |
+

@@ -165,6 +165,9 @@ config.leader = { key = "a", mods = "CTRL", timeout_milliseconds = 1000 }
 -- Use the following command to show code that you can copy paste.
 -- wezterm show-keys --lua
 config.keys = {
+	-- You can also move between panes using
+	-- ctrl + shift + <arrow keys>
+
 	-- https://wezfurlong.org/wezterm/config/lua/keyassignment/PaneSelect.html
 	-- activate pane selection mode with the default alphabet (labels are "a", "s", "d", "f" and so on)
 	{ key = "8", mods = "CTRL", action = act.PaneSelect },
