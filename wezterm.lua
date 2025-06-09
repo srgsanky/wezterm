@@ -361,6 +361,35 @@ config.keys = merge_keys(
 	disabled_keys
 )
 
+-- Search customizations (from <https://github.com/wezterm/wezterm/issues/1988>)
+-- The default search behavior in wezterm is to remember the previous search term. It is cumbersome to clear the previous search term
+-- everytime using ctrl+u. This customization will automatically clear the previous search term.
+do
+	local search_mode = wezterm.gui.default_key_tables().search_mode
+
+	table.insert(search_mode, {
+		key = "f",
+		mods = "CMD",
+		action = act.Multiple({
+			act.CopyMode("ClearPattern"),
+			act.ClearSelection,
+			act.CopyMode("ClearSelectionMode"),
+			act.CopyMode("MoveToScrollbackBottom"),
+		}),
+
+		-- Exit copy mode using ctrl + c
+		table.insert(
+			search_mode,
+			{ key = "c", mods = "CTRL", action = act.Multiple({ "ScrollToBottom", { CopyMode = "Close" } }) }
+		),
+	})
+
+	-- Update key tables with new keys
+	config.key_tables = {
+		search_mode = search_mode,
+	}
+end
+
 if is_mac then
 	-- Default
 	--    CTRL                 +                  ->   IncreaseFontSize
