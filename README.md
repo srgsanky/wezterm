@@ -52,3 +52,17 @@ alias set-tab-title="flatpak run org.wezfurlong.wezterm cli set-tab-title"
 | Modify height                                    | `CTRL + a`                    | `j/k`                 |
 | Zoom the pane                                    | `CTRL + a`                    | `z`                   |
 
+## Mac keyboard settings
+
+```sh
+# Set Delay Until Repeat to shortest
+# Default minimum via UI is 15; setting it to 10 is very fast and generally the stable limit
+defaults write -g InitialKeyRepeat -int 10
+
+# Set Key Repeat Rate to fastest
+# Default minimum via UI is 2; setting it to 1 makes it repeat roughly every 15ms
+defaults write -g KeyRepeat -int 1
+
+# Disable Accent Popup
+defaults write -g ApplePressAndHoldEnabled -bool false
+```
