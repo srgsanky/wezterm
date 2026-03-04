@@ -27,6 +27,8 @@ Add the following alias to your `~/.bashrc` or `~/.zshrc` to be able to set the 
 
 ```bash
 # For Mac
+# Add wezterm cli to your PATH
+export PATH="$PATH:/Applications/WezTerm.app/Contents/MacOS"
 alias set-tab-title="wezterm cli set-tab-title"
 
 # For Ubuntu or any other Linux where flatpak is used
