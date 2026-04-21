@@ -48,6 +48,27 @@ local config = wezterm.config_builder()
 config.color_scheme = "Catppuccin Mocha (Gogh)"
 config.colors = {
 	tab_bar = {
+		background = "#0b0022",
+		active_tab = {
+			bg_color = "#FFA500",
+			fg_color = "#333333",
+		},
+		inactive_tab = {
+			bg_color = "#200c08",
+			fg_color = "#D3D3D3",
+		},
+		inactive_tab_hover = {
+			bg_color = "#3b3052",
+			fg_color = "#909090",
+		},
+		new_tab = {
+			bg_color = "#0b0022",
+			fg_color = "#D3D3D3",
+		},
+		new_tab_hover = {
+			bg_color = "#3b3052",
+			fg_color = "#D3D3D3",
+		},
 		-- The color of the inactive tab bar edge/divider
 		inactive_tab_edge = "#575757",
 	},
@@ -68,6 +89,7 @@ config.enable_scroll_bar = true
 config.enable_tab_bar = true
 -- https://wezfurlong.org/wezterm/config/lua/config/tab_bar_at_bottom.html
 config.tab_bar_at_bottom = true
+config.show_tab_index_in_tab_bar = true
 -- The following is available only in nightly build as of now
 -- <https://wezfurlong.org/wezterm/config/lua/config/show_close_tab_button_in_tabs.html>
 -- config.show_close_tab_button_in_tabs = false
@@ -88,55 +110,10 @@ config.window_frame = {
 	font_size = font_size,
 }
 
--- https://wezfurlong.org/wezterm/config/lua/window-events/format-tab-title.html
-
--- This function returns the suggested title for a tab.
--- It prefers the title that was set via `tab:set_title()`
--- or `wezterm cli set-tab-title`, but falls back to the
--- title of the active pane in that tab.
--- TODO: wezterm uses the title prefix "Copy mode:" when the pane enters copy mode.
---	     How to replicate this behavior when using custom tab title?
-local function tab_title(tab_info)
-	-- https://wezfurlong.org/wezterm/config/lua/TabInformation.html
-	local title = tab_info.tab_title
-	-- Use 1 based index
-	local title_prefix = (tab_info.tab_index + 1) .. ": "
-	-- if the tab title is explicitly set, take that
-	if title and #title > 0 then
-		return title_prefix .. title
-	end
-	-- Otherwise, use the title from the active pane in that tab
-	return title_prefix .. tab_info.active_pane.title
-end
-
-wezterm.on("format-tab-title", function(tab, _, _, _, hover, max_width)
-	local edge_background = "#0b0022"
-
-	-- Color for inactive tab
-	local background = "#200c08" -- Black bean
-	local foreground = "#D3D3D3" -- light gray
-
-	if tab.is_active then
-		background = "#FFA500" -- orange
-		foreground = "#333333" -- gray
-	elseif hover then
-		background = "#3b3052"
-		foreground = "#909090"
-	end
-
-	local edge_foreground = background
-
-	local title = wezterm.truncate_right(tab_title(tab), max_width)
-	return {
-		{ Background = { Color = edge_background } },
-		{ Foreground = { Color = edge_foreground } },
-		{ Background = { Color = background } },
-		{ Foreground = { Color = foreground } },
-		{ Text = title },
-		{ Background = { Color = edge_background } },
-		{ Foreground = { Color = edge_foreground } },
-	}
-end)
+-- Avoid `format-tab-title` here. The callback runs synchronously on the GUI
+-- thread, and the sample showed it burning CPU while WezTerm marshaled tab
+-- state into Lua on every title refresh. Use the built-in tab bar styling
+-- above, and set explicit tab names only for infrequent, user-driven renames.
 
 -- When in Copy mode, show an indicator at the bottom right.
 -- https://wezfurlong.org/wezterm/config/lua/window/set_right_status.html
