@@ -5,6 +5,14 @@ This config maps `Cmd+E` to a visual tab switcher implemented with WezTerm's
 press `Cmd+E`, then press `Enter` to jump to the most recently used non-current
 tab, or type a tab number/title fragment to filter the list.
 
+## Files
+
+- `wezterm.lua` wires the module into the config. It calls
+  `tab_switcher.record_active_tab(window, pane)` from `update-right-status` and
+  includes `tab_switcher.key_binding()` in `config.keys`.
+- `lua/tab_switcher.lua` owns the MRU state, selector rendering, tab activation,
+  cwd extraction, and split count labeling.
+
 ## Behavior
 
 - The current tab is not shown.
@@ -50,7 +58,8 @@ paths.
 
 Current performance shape:
 
-- `update-right-status`: O(1), active tab id only.
+- `update-right-status`: O(1), active tab id only. The call crosses into
+  `lua/tab_switcher.lua`, but it does not enumerate tabs or build labels.
 - Selecting a tab: O(1) via `wezterm.mux.get_tab(tab_id):activate()`, with an
   O(tab count) fallback only if direct lookup fails.
 - Opening `Cmd+E`: O(tab count) to build the selector choices. This is the only
@@ -73,8 +82,9 @@ Those calls are kept out of the hot status/title paths. Do not move them into
 
 - Do not reintroduce `format-tab-title` for styling tab labels.
 - Do not call `tabs_with_info()` from periodic or title-formatting callbacks.
-- Keep `record_active_tab` O(1).
-- Keep detailed label generation inside `show_tab_switcher`.
+- Keep `record_active_tab` O(1) in `lua/tab_switcher.lua`.
+- Keep detailed label generation inside `show_tab_switcher` in
+  `lua/tab_switcher.lua`.
 - Prefer stable tab ids for stored MRU state; resolve to tab objects only when
   activating or rendering the selector.
 
